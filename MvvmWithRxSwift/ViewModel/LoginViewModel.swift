@@ -18,7 +18,9 @@ import CoreData
 class LoginViewModel  {
     public let data : PublishSubject<DataModel> = PublishSubject()
     public var userData: [NSManagedObject] = []
+    public var userModel : DataModel?
 
+    
     //MARK:- Validation function
     func isValid(email : String, password : String) -> Bool {
         if email == ""{
@@ -38,7 +40,6 @@ class LoginViewModel  {
     }
     
     //MARK:- Login API Call
-    
     public func LoginAPI(email : String, password : String) {
        // let param = ["email":"test@imaginato.com","password":"Imaginato2020"]
         let param = ["email":email,"password":password]
@@ -65,8 +66,11 @@ class LoginViewModel  {
       let managedContext = appDelegate.persistentContainer.viewContext
       let entity = NSEntityDescription.entity(forEntityName: "User", in: managedContext)!
       let user = NSManagedObject(entity: entity, insertInto: managedContext)
-        user.setValue("Faheem", forKeyPath: "name")
-        user.setValue("kannur", forKeyPath: "place")
+          user.setValue("Faheem", forKeyPath: "name")
+          user.setValue("Faheem.h@iroidtechnologies.com", forKeyPath: "email")
+          user.setValue("DummyToken ashdgasjhwjhdjhwebmnzbczkxhbnjkbcxznbszcnxbsdjhbc", forKeyPath: "token")
+          user.setValue("Login Successfull", forKeyPath: "message")
+          user.setValue(true, forKeyPath: "status")
       do {
         try managedContext.save()
         userData.append(user)
@@ -83,9 +87,26 @@ class LoginViewModel  {
         let managedContext = appDelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "User")
         do {
-            self.userData = try managedContext.fetch(fetchRequest)
+           self.userData = try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
           print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
+    
+    //MARK:- Delete from Db
+    public func deleteFromDb() {
+        let context = ( UIApplication.shared.delegate as! AppDelegate ).persistentContainer.viewContext
+        let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "User")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
+        do
+        {
+            try context.execute(deleteRequest)
+            try context.save()
+        }
+        catch
+        {
+            print ("There was an error")
+        }
+    }
+
 }

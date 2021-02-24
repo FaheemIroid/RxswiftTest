@@ -63,6 +63,7 @@ class LoginVC: UIViewController {
         if Helper.checkConnectivity() {
             if viewModel.isValid(email: textFieldEmail.text!, password: textFieldPassword.text!) {
             viewModel.LoginAPI(email : textFieldEmail.text!, password : textFieldPassword.text!)
+            viewModel.deleteFromDb()
             viewModel.savetoDb()
             viewModel.fetchFromDb()
             }

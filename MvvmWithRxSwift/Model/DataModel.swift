@@ -8,11 +8,9 @@
 import Foundation
 
 struct DataModel : Decodable {
-    let status : Bool?
-    let name : String?
-    let email : String?
-    let access_token : String?
-    let token_type : String?
-    let message : String?
-    let pending_status : Bool?
+    var status : Bool?
+    var name : String?
+    var email : String?
+    var token : String?
+    var message : String?
 }
